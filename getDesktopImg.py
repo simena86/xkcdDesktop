@@ -9,7 +9,7 @@ from PIL import Image
 from lxml import etree, html
 import os
 
-url='http://www.xkcd.com'
+url='http://www.xkcd.com/401'
 
 # get the comic and save it as png
 def getImage(imgPath):
@@ -39,15 +39,15 @@ import textwrap
 
 
 def headerToImage(text,imgPath,fileName):
-	fontPath = imgPath + "Sans.ttf"
-	font = ImageFont.truetype(fontPath, 18)
+	fontPath = imgPath + "std.ttf"
+	font = ImageFont.truetype(fontPath, 25)
 	textW,textH=font.getsize("S")
 	xkcd=Image.open(imgPath + fileName)	
 	xwidth, xheight = xkcd.size
 	img= Image.new("RGBA", (xwidth,588), (255,255,255))
 	draw=ImageDraw.Draw(img)
-	margin = offset = 5
-	for line in textwrap.wrap(text, width=xwidth/textW-6):
+	margin = offset = 4
+	for line in textwrap.wrap(text, width=xwidth/textW-1):
 		draw.text((margin, offset), line, font=font, fill=(0,0,0))
 		offset += font.getsize(line)[1]
 	img=img.crop((0,0,xwidth,offset+textH ))
@@ -59,7 +59,7 @@ def textToImage(text,imgPath,fileName):
 	textW,textH=font.getsize("S")
 	xkcd=Image.open(imgPath + fileName)	
 	xwidth, xheight = xkcd.size
-	img= Image.new("RGBA", (xwidth,588), (255,255,255))
+	img= Image.new("RGBA", (xwidth,588), (190,190,190))
 	draw=ImageDraw.Draw(img)
 	margin = offset = 5
 	for line in textwrap.wrap(text, width=xwidth/textW-6):
@@ -69,6 +69,7 @@ def textToImage(text,imgPath,fileName):
 	return img
 
 def stitchImagesTogether(xkcdImgPath):
+	sideMargin=20
 	headerImg=headerToImage(getHeader(),imgPath,'todaysXkcd.png')
 	textImg=textToImage(text,imgPath,'todaysXkcd.png')
 
@@ -76,10 +77,11 @@ def stitchImagesTogether(xkcdImgPath):
 	xw,xh=xImg.size
 	tw,th=textImg.size
 	hw,hh=headerImg.size
-	img= Image.new("RGBA", (xw,xh+th+hh), (255,255,255))
-	img.paste(headerImg,(0,0))
-	img.paste(xImg,(0,hh))
-	img.paste(textImg,(0,xh+hh))
+	img= Image.new("RGBA", (xw+sideMargin*2,xh+th+hh+2*sideMargin), (255,255,255))
+	img.paste(headerImg,(sideMargin,sideMargin))
+	img.paste(xImg,(sideMargin,hh))
+	img.paste(textImg,(sideMargin,xh+hh+8))
+	#img.paste(Image.new("RGBA",(xw+sideMargin)))
 	img.save(xkcdImgPath)
 
 getHeader()
