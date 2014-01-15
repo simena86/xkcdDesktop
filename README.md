@@ -10,6 +10,7 @@ The program is tested on UBUNTU 12.04
 - python urllib
 - python PIL image library
 - python lxml
+- python textwrap
 
 To make the script run every monday, wednesday and friday put this in your crontab file (write crontab -e in your terminal)
 

@@ -1,15 +1,18 @@
 #!/usr/bin/python
-
 #	This script gets the latest xkcd comic strip 
 #	downloads it and, makes it the desktop background
-#	by simen andresen
+#	----  by simen andresen  ----     #
 
 import urllib
 from PIL import Image
 from lxml import etree, html
 import os
+from PIL import ImageFont
+from PIL import ImageDraw 
+import textwrap
 
-url='http://www.xkcd.com/401'
+
+url='http://www.xkcd.com'
 
 # get the comic and save it as png
 def getImage(imgPath):
@@ -26,17 +29,7 @@ def getMouseOverText():
 def getHeader():
 	page = html.fromstring(urllib.urlopen(url).read())
 	header=page.xpath('//div[@id="ctitle"]/text()')[0]
-	print header
 	return header
-
-	
-# using pil for image
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw 
-import textwrap
-
-
 
 def headerToImage(text,imgPath,fileName):
 	fontPath = imgPath + "std.ttf"
@@ -53,7 +46,8 @@ def headerToImage(text,imgPath,fileName):
 	img=img.crop((0,0,xwidth,offset+textH ))
 	return img
 
-def textToImage(text,imgPath,fileName):
+def textToImage(imgPath,fileName):
+	text=getMouseOverText()
 	fontPath = imgPath + "FreeMono.ttf"
 	font = ImageFont.truetype(fontPath, 14)
 	textW,textH=font.getsize("S")
@@ -68,12 +62,11 @@ def textToImage(text,imgPath,fileName):
 	img=img.crop((0,0,xwidth,offset+textH ))
 	return img
 
-def stitchImagesTogether(xkcdImgPath):
+def stitchImagesTogether(xkcdImgName, imgPath):
 	sideMargin=20
-	headerImg=headerToImage(getHeader(),imgPath,'todaysXkcd.png')
-	textImg=textToImage(text,imgPath,'todaysXkcd.png')
-
-	xImg=Image.open(xkcdImgPath)
+	headerImg=headerToImage(getHeader(),imgPath,xkcdImgName)
+	textImg=textToImage(imgPath,xkcdImgName)
+	xImg=Image.open(imgPath + xkcdImgName)
 	xw,xh=xImg.size
 	tw,th=textImg.size
 	hw,hh=headerImg.size
@@ -82,15 +75,18 @@ def stitchImagesTogether(xkcdImgPath):
 	img.paste(xImg,(sideMargin,hh))
 	img.paste(textImg,(sideMargin,xh+hh+8))
 	#img.paste(Image.new("RGBA",(xw+sideMargin)))
-	img.save(xkcdImgPath)
+	img.save(imgPath + xkcdImgName)
 
-getHeader()
 
-imgPath='/home/simena/household/xkcdDesktop/'
-getImage(imgPath)
-text=getMouseOverText()
-stitchImagesTogether(imgPath + 'todaysXkcd.png')
+def runAll():
+	imgPath='/home/simena/household/xkcdDesktop/'
+	getImage(imgPath)
+	stitchImagesTogether('todaysXkcd.png',imgPath)
+	# set the comic as background
+	os.system('gsettings set org.gnome.desktop.background picture-uri file://'+imgPath +  '/todaysXkcd.png')
 
-# set the comic as background
-os.system('gsettings set org.gnome.desktop.background picture-uri file://'+imgPath +  '/todaysXkcd.png')
+
+runAll()
+
+
 
