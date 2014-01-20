@@ -83,7 +83,10 @@ def runAll():
 	getImage(imgPath)
 	stitchImagesTogether('todaysXkcd.png',imgPath)
 	# set the comic as background
-	os.system('gsettings set org.gnome.desktop.background picture-uri file://'+imgPath +  '/todaysXkcd.png')
+	osString = 'gsettings set org.gnome.desktop.background picture-uri file://'+imgPath +  'todaysXkcd.png' 
+	os.system(osString)
+	osString = 'gsettings set org.gnome.desktop.background picture-options centered '
+	os.system(osString)
 
 
 runAll()
