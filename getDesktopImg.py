@@ -1,18 +1,15 @@
 #!/usr/bin/python
-#	This script gets the latest xkcd comic strip 
-#	downloads it and, makes it the desktop background
-#	----  by simen andresen  ----     #
+# This script gets the latest xkcd comic strip 
+# downloads it and makes it the desktop background
+# by simen andresen 
 
 import urllib
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 from lxml import etree, html
-import os
-from PIL import ImageFont
-from PIL import ImageDraw 
+import os, sys
 import textwrap
 
 
-url='http://www.xkcd.com'
 
 # get the comic and save it as png
 def getImage(imgPath):
@@ -79,7 +76,6 @@ def stitchImagesTogether(xkcdImgName, imgPath):
 
 
 def runAll():
-	imgPath='/home/simena/household/xkcdDesktop/'
 	getImage(imgPath)
 	stitchImagesTogether('todaysXkcd.png',imgPath)
 	# set the comic as background
@@ -89,7 +85,7 @@ def runAll():
 	os.system(osString)
 
 
+
+url='http://www.xkcd.com'
+imgPath= os.path.abspath(  os.path.dirname(sys.argv[0])) + '/' 
 runAll()
-
-
-
