@@ -1,4 +1,3 @@
-
 xkcdDesktop
 =========
 
@@ -18,4 +17,4 @@ To make the script run every monday, wednesday and friday put this in your cront
 	0 10 * * wed /my/path/getDesktopImg.py 
 	0 10 * * fri /my/path/getDesktopImg.py 
 
-
+Or if you're using a computer that is regularly switched off, you should use anacron.
