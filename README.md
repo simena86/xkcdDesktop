@@ -5,11 +5,11 @@ xkcdDesktop downloads the latest xkcd comic strip and uploads it to your desktop
 The program is tested on UBUNTU 12.04
 
 **requirements:**
+The following packages are needed (available in the apt repositories)
 
-- python urllib
-- python PIL image library
-- python lxml
-- python textwrap
+python-urllib
+python-imaging 
+python-lxml
 
 To make the script run every monday, wednesday and friday put this in your crontab file (write crontab -e in your terminal)
 
