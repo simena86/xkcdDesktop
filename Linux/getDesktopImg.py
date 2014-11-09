@@ -87,7 +87,7 @@ class GetXKCDDesktop:
     def run(self):
         self.getImage()
         self.stitchImagesTogether()
-        # set the comic as background
+       # set the comic as background
         osString = 'gsettings set org.gnome.desktop.background picture-uri file://' + self.img_path_png
         os.system(osString)
         osString = 'gsettings set org.gnome.desktop.background picture-options centered '
